@@ -15,11 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
+            $table->integer('publish_year')->nullable(); // Add publish_year
             $table->unsignedBigInteger('author_id');
             $table->timestamps();
         
             $table->foreign('author_id')->references('id')->on('authors')->onDelete('cascade');
         });
+        
     }
 
 
