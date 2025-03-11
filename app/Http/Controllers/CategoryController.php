@@ -12,7 +12,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return response()->json(Category::all());
+        return response()->json(Category::with('books')->get(), 200);
     }
 
     /**
@@ -22,6 +22,7 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:60',
+            'description' => 'nullable|string',
         ]);
 
         $category = Category::create($request->all());
@@ -34,7 +35,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        return response()->json($category);
+        return response()->json($category->load('books'), 200);
     }
 
     /**
@@ -44,11 +45,12 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name' => 'string|max:60',
+            'description' => 'nullable|string',
         ]);
 
         $category->update($request->all());
 
-        return response()->json($category);
+        return response()->json($category, 200);
     }
 
     /**
