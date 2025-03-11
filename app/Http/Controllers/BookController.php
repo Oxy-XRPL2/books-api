@@ -22,12 +22,14 @@ class BookController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:250',
+            'description' => 'nullable|string',
+            'publish_year' => 'nullable|integer',
             'author_id' => 'required|exists:authors,id',
             'category_ids' => 'array',
             'category_ids.*' => 'exists:categories,id',
         ]);
 
-        $book = Book::create($request->only(['title', 'author_id']));
+        $book = Book::create($request->only(['title', 'description', 'publish_year', 'author_id']));
         
         if ($request->has('category_ids')) {
             $book->categories()->attach($request->category_ids);
@@ -51,12 +53,14 @@ class BookController extends Controller
     {
         $request->validate([
             'title' => 'string|max:250',
+            'description' => 'nullable|string',
+            'publish_year' => 'nullable|integer',
             'author_id' => 'exists:authors,id',
             'category_ids' => 'array',
             'category_ids.*' => 'exists:categories,id',
         ]);
 
-        $book->update($request->only(['title', 'author_id']));
+        $book->update($request->only(['title', 'description', 'publish_year', 'author_id']));
         
         if ($request->has('category_ids')) {
             $book->categories()->sync($request->category_ids);
