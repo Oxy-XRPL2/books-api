@@ -12,7 +12,7 @@ class AuthorController extends Controller
      */
     public function index()
     {
-        return response()->json(Author::all());
+        return response()->json(Author::with('books')->get(), 200);
     }
 
     /**
@@ -22,6 +22,7 @@ class AuthorController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:100',
+            'bio' => 'nullable|string',
         ]);
 
         $author = Author::create($request->all());
@@ -34,7 +35,7 @@ class AuthorController extends Controller
      */
     public function show(Author $author)
     {
-        return response()->json($author);
+        return response()->json($author->load('books'), 200);
     }
 
     /**
@@ -44,11 +45,12 @@ class AuthorController extends Controller
     {
         $request->validate([
             'name' => 'sometimes|string|max:100',
+            'bio' => 'nullable|string',
         ]);
 
         $author->update($request->all());
 
-        return response()->json($author);
+        return response()->json($author, 200);
     }
 
     /**
